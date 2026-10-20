@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Screening System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000015;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1d4ed8;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 150px;
+            margin-top: 8px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 18px;
+            background: #eff6ff;
+            border-radius: 8px;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+
+        .score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Resume Screening System</h1>
+        <p>Compare your resume with a job description.</p>
+
+        <form method="POST">
+            <label for="resume">Candidate Resume Text</label>
+            <textarea id="resume" name="resume"
+                placeholder="Paste your resume text here..."
+                required></textarea>
+
+            <label for="job_description">Job Description</label>
+            <textarea id="job_description"
+                name="job_description"
+                placeholder="Paste the job description here..."
+                required></textarea>
+
+            <button type="submit">Analyze Resume</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            {% if result.error %}
+                <p class="error">{{ result.error }}</p>
+            {% else %}
+                <h2>Screening Results</h2>
+
+                <p>Resume Match Percentage</p>
+                <div class="score">
+                    {{ result.percentage }}%
+                </div>
+
+                <h3>Matching Skills</h3>
+                {% if result.matched %}
+                    <p>{{ result.matched | join(', ') }}</p>
+                {% else %}
+                    <p>No matching skills found.</p>
+                {% endif %}
+
+                <h3>Missing Skills</h3>
+                {% if result.missing %}
+                    <p>{{ result.missing | join(', ') }}</p>
+                {% else %}
+                    <p>No missing skills found.</p>
+                {% endif %}
+
+                <h3>Candidate Suitability Summary</h3>
+                <p>{{ result.summary }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
